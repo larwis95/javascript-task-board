@@ -25,6 +25,36 @@
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
     </div>
     <!-- Todo: Create a modal with a form to add tasks -->
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="taskName" class="form-label">Task Name</label>
+                  <input type="text" class="form-control" id="taskname"></input>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="taskDate" class="form-label">Due Date</label>
+                  <input type="date" class="form-control" id="taskDate"></input>
+                </div>
+              </div>
+                <div class="row mb-3">
+                  <label for="taskDescription" class="form-label">Add a Description</label>
+                  <textarea type="text" class="form-control" id="taskDescription"></textarea>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-success">Add Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row swim-lanes text-center justify-content-between">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
@@ -36,6 +66,7 @@
           </div>
         </div>
       </div>
+      
       <div class="col-12 col-lg-4 d-flex">
         <div id="in-progress" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
