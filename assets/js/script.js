@@ -39,13 +39,14 @@ function renderTaskList() {
 // Todo: create a function to handle adding a new task
 function handleAddTask() {
     const formModal = $('#formModal');
+    console.log(todoUl.length);
      task = {
         name: taskName.val(),
         date: dayjs(`${taskDate.val()}`).format('MMM D, YYYY'),
         desc: taskDesc.val(),
         id: generateTaskId(),
-        list: '',
-        pos: '',
+        list: '#todo-list',
+        pos: todoUl.children().length + 1,
     };
     savedCards.push(task);
     localStorage.setItem('tasks', JSON.stringify(savedCards));
