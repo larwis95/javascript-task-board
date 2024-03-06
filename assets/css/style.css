@@ -14,3 +14,9 @@ body {
 .task-card:hover {
   cursor: grab;
 }
+
+.connected-list {
+  min-width: 322px;
+  min-height: 395.41px;
+  list-style-type: none;
+}

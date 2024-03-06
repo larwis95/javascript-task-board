@@ -32,37 +32,41 @@
             <h5 class="modal-title" id="exampleModalLongTitle">Add Task</h5>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="card-form">
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="taskName" class="form-label">Task Name</label>
-                  <input type="text" class="form-control" id="taskname"></input>
+                  <input type="text" class="form-control" id="taskName" required></input>
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="taskDate" class="form-label">Due Date</label>
-                  <input type="date" class="form-control" id="taskDate"></input>
+                  <input type="date" class="form-control" id="taskDate" required></input>
                 </div>
               </div>
                 <div class="row mb-3">
                   <label for="taskDescription" class="form-label">Add a Description</label>
-                  <textarea type="text" class="form-control" id="taskDescription"></textarea>
+                  <textarea type="text" class="form-control" id="taskDescription" required></textarea>
+                </div>
+                <div class="row modal-footer d-flex justify-content-center">
+                  <input id="modal-add-task" type="submit" class="btn btn-success"></button>
                 </div>
             </form>
           </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="button" class="btn btn-success">Add Task</button>
-          </div>
-        </div>
+         </div>
       </div>
     </div>
-    <div class="row swim-lanes text-center justify-content-between">
+    <div class="row swim-lanes text-center justify-content-between" id="lists-container">
       <div class="col-12 col-lg-4 d-flex">
         <div id="to-do" class="card border-light mb-3 lane flex-grow-1">
           <div class="card-header bg-white">
             <h2 class="card-title mb-1">To Do</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="todo-cards"></div>
+            <div id="todo-cards">
+              <ul id="todo-list" class="connected-list">
+
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -73,7 +77,11 @@
             <h2 class="card-title mb-1">In Progress</h2>
           </div>
           <div class="card-body bg-light">
-            <div id="in-progress-cards"></div>
+            <div id="in-progress-cards">
+              <ul id="inprogress-list" class="connected-list">
+
+              </ul>
+            </div>
           </div>
         </div>
         </div>
@@ -83,7 +91,11 @@
               <h2 class="card-title mb-1">Done</h2>
             </div>
             <div class="card-body bg-light">
-              <div id="done-cards"></div>
+              <div id="done-cards">
+                <ul id="done-list" class="connected-list">
+
+                </ul>
+              </div>
           </div>
           </div>
       </div>
