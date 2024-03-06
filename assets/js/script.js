@@ -23,7 +23,7 @@ function createTaskCard(task) {
     todoUl.append(`<li id="${task.id}"><div class="card" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">${task.name}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Due Date: ${task.date}</h6>
+      <h6 class="card-subtitle">Due Date: ${dayjs(`${task.date}`).format('MMM D, YYYY')}</h6>
       <p class="card-text">${task.desc}</p>
       <button>Delete</button>
      </div>
@@ -40,19 +40,37 @@ function renderTaskList() {
     for (let i = 0; i < savedLists.length; i++) {
         allList[i].innerHTML = savedLists[i];
     };
+    let allLi = $(allList.children());
+        for (let i = 0; i < allLi.length; i++) {
+            let id = $(allLi[i]).attr('id');
+            if (id == savedCards[i].id) {
+                let today = dayjs();
+                let dueDate = dayjs(savedCards[i].date)
+                if (dueDate.diff(today, 'days') <= colorDate && dueDate.diff(today, 'days') > -1 && $(allLi[i]).parent().attr('id') !== 'done-list') {
+                    $(allLi[i].children[0]).attr('class', 'card text-dark bg-warning mb-3');
+                    $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-warning btn-outline-dark');
+                }
+                else if (dueDate.diff(today, 'days') <= -1) {
+                    $(allLi[i].children[0]).attr('class', 'card text-white bg-danger mb-3');
+                    $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-danger btn-outline-dark');
+                }
+                else if ((dueDate.diff(today, 'days') > colorDate || $(allLi[i]).parent().attr('id') === 'done-list')) {
+                    $(allLi[i].children[0]).attr('class', 'card text-white bg-success mb-3');
+                    $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-success btn-outline-light');
+                };
+            };
+        };
 };
 
 // Todo: create a function to handle adding a new task
 function handleAddTask() {
     const formModal = $('#formModal');
-    console.log(todoUl.length);
      task = {
         name: taskName.val(),
-        date: dayjs(`${taskDate.val()}`).format('MMM D, YYYY'),
+        date: taskDate.val(),
         desc: taskDesc.val(),
         id: generateTaskId(),
     };
-    console.log(savedCards);
     savedCards.push(task);
     localStorage.setItem('tasks', JSON.stringify(savedCards));
     formModal.modal('toggle');
@@ -62,18 +80,12 @@ function handleAddTask() {
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event) {
     const deleteBtn = $(event.target);
-    console.log(deleteBtn);
     const li = deleteBtn.closest('li');
     const liId = li.attr('id');
-    console.log(liId);
     for (let i = 0; i < savedCards.length; i++) {
-        console.log(savedCards[i].id)
         if (savedCards[i].id == liId) {
-            console.log(`removed ${savedCards[i]}`);
             savedCards.splice(i, 1);
-            console.log(savedCards);
             localStorage.setItem("tasks", JSON.stringify(savedCards));
-            console.log(`deleted ${li}`);
             li.remove();
         };
     };
@@ -84,15 +96,12 @@ function handleDeleteTask(event) {
 function handleDrag(event, ui) {
     let allList = $('ul')
     savedLists = [];
-    console.log(allList);
     for (let i = 0; i < allList.length; i++) {
         savedLists.push(allList[i].innerHTML);
     };
     localStorage.setItem("taskOrder", JSON.stringify(savedLists));
+    renderTaskList();
 };
-
-
-
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(() => {
@@ -104,7 +113,7 @@ $(document).ready(() => {
     placeholder: "ui-state-highlight",
     stop: (event, ui) => {
         handleDrag(event, ui);
-    }});
+    }}).disableSelection();
     if (taskOrder !== null) {
         savedLists = taskOrder;
     };
@@ -113,7 +122,6 @@ $(document).ready(() => {
     };
     renderTaskList();
     submitForm.on('submit', (event) => {
-        console.log('submitted');
         event.preventDefault();
         handleAddTask();
     });
