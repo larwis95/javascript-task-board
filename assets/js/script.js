@@ -1,14 +1,16 @@
 // Retrieve tasks and nextId from localStorage
 let taskList = JSON.parse(localStorage.getItem("tasks"));
+let taskOrder = JSON.parse(localStorage.getItem("taskOrder"));
 const modalForm = $('#form-modal');
 const todoUl = $('#todo-list');
 const inProgressUl = $('#inprogress-list');
 const doneUl = $('#done-list');
-const connect = {connectWith: ".connected-list"};
 const taskName = $('#taskName');
 const taskDate = $('#taskDate');
 const taskDesc = $('#taskDescription');
+const colorDate = 5;
 let savedCards = [];
+let savedLists = [];
 
 // Todo: create a function to generate a unique task id
 function generateTaskId() {
@@ -26,6 +28,7 @@ function createTaskCard(task) {
       <button>Delete</button>
      </div>
   </div></li>`);
+  handleDrag();
   taskName.val('');
   taskDate.val('');
   taskDesc.val('');
@@ -33,7 +36,10 @@ function createTaskCard(task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-
+    let allList = $('ul');
+    for (let i = 0; i < savedLists.length; i++) {
+        allList[i].innerHTML = savedLists[i];
+    };
 };
 
 // Todo: create a function to handle adding a new task
@@ -45,9 +51,8 @@ function handleAddTask() {
         date: dayjs(`${taskDate.val()}`).format('MMM D, YYYY'),
         desc: taskDesc.val(),
         id: generateTaskId(),
-        list: '#todo-list',
-        pos: todoUl.children().length + 1,
     };
+    console.log(savedCards);
     savedCards.push(task);
     localStorage.setItem('tasks', JSON.stringify(savedCards));
     formModal.modal('toggle');
@@ -72,20 +77,41 @@ function handleDeleteTask(event) {
             li.remove();
         };
     };
+    handleDrag();
     
 };
 
-// Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {
-
+function handleDrag(event, ui) {
+    let allList = $('ul')
+    savedLists = [];
+    console.log(allList);
+    for (let i = 0; i < allList.length; i++) {
+        savedLists.push(allList[i].innerHTML);
+    };
+    localStorage.setItem("taskOrder", JSON.stringify(savedLists));
 };
+
+
+
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(() => {
     const submitForm = $('#card-form');
     const deleteTaskBtn = $('#lists-container');
     const lists = $('ul.connected-list');
-    lists.sortable(connect)
+    lists.sortable({
+    connectWith: ".connected-list",
+    placeholder: "ui-state-highlight",
+    stop: (event, ui) => {
+        handleDrag(event, ui);
+    }});
+    if (taskOrder !== null) {
+        savedLists = taskOrder;
+    };
+    if (taskList !== null) {
+        savedCards = taskList;
+    };
+    renderTaskList();
     submitForm.on('submit', (event) => {
         console.log('submitted');
         event.preventDefault();
