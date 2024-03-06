@@ -46,15 +46,16 @@ function renderTaskList() {
             if (id == savedCards[i].id) {
                 let today = dayjs();
                 let dueDate = dayjs(savedCards[i].date)
-                if (dueDate.diff(today, 'days') <= colorDate && dueDate.diff(today, 'days') > -1 && $(allLi[i]).parent().attr('id') !== 'done-list') {
+                console.log(`due date days left: ${dueDate.diff(today, 'days')}`)
+                if (dueDate.diff(today, 'days') < colorDate && dueDate.diff(today, 'days') > 0 && $(allLi[i]).parent().attr('id') !== 'done-list') {
                     $(allLi[i].children[0]).attr('class', 'card text-dark bg-warning mb-3');
                     $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-warning btn-outline-dark');
                 }
-                else if (dueDate.diff(today, 'days') <= -1) {
+                else if (dueDate.diff(today, 'days') <= 0 && $(allLi[i]).parent().attr('id') !== 'done-list') {
                     $(allLi[i].children[0]).attr('class', 'card text-white bg-danger mb-3');
-                    $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-danger btn-outline-dark');
+                    $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-danger btn-outline-light');
                 }
-                else if ((dueDate.diff(today, 'days') > colorDate || $(allLi[i]).parent().attr('id') === 'done-list')) {
+                else if ((dueDate.diff(today, 'days') >= colorDate || $(allLi[i]).parent().attr('id') === 'done-list')) {
                     $(allLi[i].children[0]).attr('class', 'card text-white bg-success mb-3');
                     $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-success btn-outline-light');
                 };
