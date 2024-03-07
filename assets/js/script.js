@@ -75,7 +75,7 @@ function checkDate(date) {
         return 'yellow';
     }
     else { //if below 0 return red
-        return 'red'
+        return 'red';
     };
 };
 
@@ -150,7 +150,7 @@ function handleDeleteTask(event) {
 
 function updateTaskOrder() {
     orderList = []; //clears our saved order
-    orderList = [todoUl.sortable('toArray', {attribute: 'id'}), inProgressUl.sortable('toArray', {attribute: 'id'}), doneUl.sortable('toArray', {attribute: 'id'})] //updates the order in our savedOrder array
+    orderList = [todoUl.sortable('toArray', {attribute: 'id'}), inProgressUl.sortable('toArray', {attribute: 'id'}), doneUl.sortable('toArray', {attribute: 'id'})]; //updates the order in our savedOrder array
     localStorage.setItem('taskOrder', JSON.stringify(orderList)); //updates local storage with our new order
     
 };
@@ -177,9 +177,9 @@ $(document).ready(() => {
         }
         else if (ul.attr('id') !== 'done-list') { //if not set back to correct color it should be
             let dateText = li.find('h6').text;
-            let formatedDate = dayjs(dateText).format('YYYY MM DD')
+            let formatedDate = dayjs(dateText).format('YYYY MM DD');
             let colorCheck = checkDate(formatedDate);
-            const cardColor = new card(colorCheck)
+            const cardColor = new card(colorCheck);
             const btnColor = new button(colorCheck);
             cardDiv.attr('class', cardColor.checkColor());
             btn.attr('class', btnColor.checkColor());
