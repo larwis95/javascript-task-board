@@ -18,7 +18,7 @@ const classes = { //object to hold our classes for changing the card and btn col
     redBtn: 'btn btn-danger btn-outline-light'
 };
 let savedCards = []; //array that holds our saved card values
-let orderList = []; //array that saves our list order
+let orderList = [[], [], []]; //array that saves our list order
 
 //class that handles the card colors,
 class card {
