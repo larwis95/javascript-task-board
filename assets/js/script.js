@@ -41,27 +41,32 @@ function renderTaskList() {
         allList[i].innerHTML = savedLists[i];
     };
     let allLi = $(allList.children());
-        for (let i = 0; i < allLi.length; i++) {
-            let id = $(allLi[i]).attr('id');
-            if (id == savedCards[i].id) {
+        for (let i = 0; i < savedCards.length; i++) {
                 let today = dayjs();
                 let dueDate = dayjs(savedCards[i].date)
                 console.log(`due date days left: ${dueDate.diff(today, 'days')}`)
-                if (dueDate.diff(today, 'days') < colorDate && dueDate.diff(today, 'days') > 0 && $(allLi[i]).parent().attr('id') !== 'done-list') {
+                if ($(allLi[i]).attr('id') == savedCards[i].id) {
+                    debugger;
+                    console.log(allLi[i]);
+                if ((dueDate.diff(today, 'days') < colorDate && dueDate.diff(today, 'days') >= 0) && $(allLi[i]).parent().attr('id') !== 'done-list') {
                     $(allLi[i].children[0]).attr('class', 'card text-dark bg-warning mb-3');
                     $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-warning btn-outline-dark');
                 }
-                else if (dueDate.diff(today, 'days') <= 0 && $(allLi[i]).parent().attr('id') !== 'done-list') {
+                else if (dueDate.diff(today, 'days') < 0 && $(allLi[i]).parent().attr('id') !== 'done-list') {
                     $(allLi[i].children[0]).attr('class', 'card text-white bg-danger mb-3');
                     $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-danger btn-outline-light');
                 }
-                else if ((dueDate.diff(today, 'days') >= colorDate || $(allLi[i]).parent().attr('id') === 'done-list')) {
+                else if ($(allLi[i]).parent().attr('id') === 'done-list' || dueDate.diff(today, 'days') >= colorDate) {
                     $(allLi[i].children[0]).attr('class', 'card text-white bg-success mb-3');
                     $(allLi[i].children[0].children[0].children[3]).attr('class', 'btn btn-success btn-outline-light');
-                };
+                
+                }
+                else {
+                    return;
+                }
             };
         };
-};
+    };
 
 // Todo: create a function to handle adding a new task
 function handleAddTask() {
@@ -94,14 +99,14 @@ function handleDeleteTask(event) {
     
 };
 
-function handleDrag(event, ui) {
-    let allList = $('ul')
+function handleDrag() {
+    let allList = $('ul');
     savedLists = [];
     for (let i = 0; i < allList.length; i++) {
         savedLists.push(allList[i].innerHTML);
+        renderTaskList();
     };
     localStorage.setItem("taskOrder", JSON.stringify(savedLists));
-    renderTaskList();
 };
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -112,8 +117,8 @@ $(document).ready(() => {
     lists.sortable({
     connectWith: ".connected-list",
     placeholder: "ui-state-highlight",
-    stop: (event, ui) => {
-        handleDrag(event, ui);
+    update: () => {
+        handleDrag();
     }}).disableSelection();
     if (taskOrder !== null) {
         savedLists = taskOrder;
@@ -121,7 +126,6 @@ $(document).ready(() => {
     if (taskList !== null) {
         savedCards = taskList;
     };
-    renderTaskList();
     submitForm.on('submit', (event) => {
         event.preventDefault();
         handleAddTask();
@@ -130,5 +134,5 @@ $(document).ready(() => {
         event.stopPropagation();
         handleDeleteTask(event);
     });
-
+    renderTaskList();
 });
