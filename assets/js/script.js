@@ -18,7 +18,7 @@ const classes = { //object to hold our classes for changing the card and btn col
     redBtn: 'btn btn-danger btn-outline-light'
 };
 let savedCards = []; //array that holds our saved card values
-let orderList = [[], [], []]; //array that saves our list order
+let orderList;//array that saves our list order
 
 //class that handles the card colors,
 class card {
@@ -86,7 +86,7 @@ function createTaskCard(task, list) {
     list.append(`<li id="${task.id}"><div class="${cardColor.checkColor()}" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">${task.name}</h5>
-      <h6 class="card-subtitle">${dayjs(`${task.date}`).format('MMM D, YYYY')}</h6>
+      <h6 class="card-subtitle">Due Date: ${dayjs(`${task.date}`).format('MMM D, YYYY')}</h6>
       <p class="card-text">${task.desc}</p>
       <button class="${btnColor.checkColor()}"}>Delete</button>
      </div>
@@ -160,6 +160,7 @@ $(document).ready(() => {
     const submitForm = $('#card-form'); //selects our form in the modal
     const deleteTaskBtn = $('#lists-container'); //selects our container for our lists
     const lists = $('ul.connected-list'); //selects all our UL
+    orderList = [[], [], []];
     lists.sortable( //makes lists sortable
     {
     connectWith: ".connected-list", //connects the lists together to be sortable with class selector
@@ -176,7 +177,8 @@ $(document).ready(() => {
             btn.attr('class', classes.greenBtn);
         }
         else if (ul.attr('id') !== 'done-list') { //if not set back to correct color it should be
-            let dateText = li.find('h6').text;
+            let h6Text = li.find('h6').text();
+            let dateText = h6Text.replace('Due Date: ', '');
             let formatedDate = dayjs(dateText).format('YYYY MM DD');
             let colorCheck = checkDate(formatedDate);
             const cardColor = new card(colorCheck);
