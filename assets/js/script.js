@@ -102,13 +102,13 @@ function renderTaskList() {
     const inprogIds = orderList[1].map(Number);  //these 3 lines convert our orderlist sub array values to numbers so we can compare them with our task ids
     const completeIds = orderList[2].map(Number);
     for (let i = 0; i < savedCards.length; i++) {  //loop that checks every task and compares it to the task id[i] to determine which list it goes in.
-        if (todoIds.includes(savedCards[i].id) === true) {
+        if (todoIds.includes(savedCards[i].id)) {
         createTaskCard(savedCards[i], todoUl);
         }
-        if (inprogIds.includes(savedCards[i].id) === true) {
+        if (inprogIds.includes(savedCards[i].id)) {
         createTaskCard(savedCards[i], inProgressUl);
         }
-        if (completeIds.includes(savedCards[i].id) === true) {
+        if (completeIds.includes(savedCards[i].id)) {
         savedCards[i].color = 'green' //if its in the done list color should always be green
         createTaskCard(savedCards[i], doneUl);
         }
@@ -204,7 +204,11 @@ $(document).ready(() => {
     });
     deleteTaskBtn.on('click', (event) => { //event listener for delete button
         event.stopPropagation();
-        handleDeleteTask(event);
+            const element = $(event.target);
+            if (element.get(0).tagName === "BUTTON") {
+            handleDeleteTask(event);
+        };
+        return;
     });
     renderTaskList(); //render cards on load
 });
