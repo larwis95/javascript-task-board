@@ -18,7 +18,7 @@ const classes = { //object to hold our classes for changing the card and btn col
     redBtn: 'btn btn-danger btn-outline-light'
 };
 let savedCards = []; //array that holds our saved card values
-let orderList;//array that saves our list order
+let orderList; //array that saves our list order
 
 //class that handles the card colors,
 class card {
@@ -131,6 +131,9 @@ function handleAddTask() {
     localStorage.setItem('tasks', JSON.stringify(savedCards)); //updates local storage with our tasks
     formModal.modal('toggle'); //closes our modal
     createTaskCard(task, todoUl); //creates our task card
+    taskName.val('');
+    taskDate.val('');
+    taskDesc.val(''); 
 };
 
 // deletes task when button is pressed, removes it from the taskarray and local storage
